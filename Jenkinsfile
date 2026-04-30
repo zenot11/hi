@@ -45,6 +45,20 @@ pipeline{
                 sh """./${params.FILE_NAME}"""
             }
         }
+        stage('Sending an artifact to Prod'){
+            steps{
+                sshPublisher(
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: 'zenot11',
+                            transfers: [
+                                sshTransfer(sourceFiles: "${params.FILE_NAME}")
+                            ]
+                        )
+                    ]
+                )
+            }
+        }
     }
     post{
         success{
